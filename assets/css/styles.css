@@ -235,11 +235,10 @@ p { color: var(--texto-secundario); }
   width: min(100% - 1.5rem, 1180px);
   margin-inline: auto;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem 0.75rem;
   padding-block: 0.75rem;
+  position: relative;
 }
 .nav__logo {
   font-family: var(--f-display);
@@ -248,21 +247,68 @@ p { color: var(--texto-secundario); }
   color: var(--texto);
   white-space: nowrap;
 }
-.nav__links {
+
+/* Agrupa hamburguesa + menú + WhatsApp + switch, pegado a la orilla derecha */
+.nav__right {
   display: flex;
   align-items: center;
-  gap: clamp(0.5rem, 2vw, 2rem);
-  font-size: var(--paso--1);
+  gap: 0.6rem;
+}
+
+.nav__hamburguesa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--texto);
+}
+.nav__hamburguesa .icono { width: 22px; height: 22px; }
+
+.nav__links {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  flex-direction: column;
+  gap: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--borde);
+  box-shadow: 0 12px 20px -12px rgb(0 0 0 / 0.25);
+  font-size: var(--paso-0);
   font-weight: 500;
   color: var(--texto);
 }
-.nav__links a:not(.btn) {
-  display: none;
+.nav__links[data-open] { display: flex; }
+.nav__links a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.75rem min(4vw, 1.5rem);
+  border-top: 1px solid var(--borde);
 }
+
 @media (min-width: 640px) {
-  .nav__links a:not(.btn) { display: inline; }
   .nav__inner { width: min(100% - 2.5rem, 1180px); padding-block: 1rem; }
   .nav__logo { font-size: var(--paso-1); }
+  .nav__hamburguesa { display: none; }
+  .nav__links {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(1rem, 2vw, 2rem);
+    background: none;
+    border: 0;
+    box-shadow: none;
+    font-size: var(--paso--1);
+  }
+  .nav__links a {
+    min-height: auto;
+    padding: 0;
+    border: 0;
+  }
 }
 
 /* --- HERO (elemento firma) --- */
@@ -748,7 +794,7 @@ p { color: var(--texto-secundario); }
    adaptado: checkbox accesible (sr-only en vez de display:none, para que
    quede en el orden de tabulación) + foco visible propio. */
 .theme-switch {
-  --toggle-size: 11px;
+  --toggle-size: 8px;
   --container-width: 5.625em;
   --container-height: 2.5em;
   --container-radius: 6.25em;
@@ -767,6 +813,9 @@ p { color: var(--texto-secundario); }
   --circle-transition: .3s cubic-bezier(0, -0.02, 0.35, 1.17);
   display: inline-block;
   line-height: 0;
+  /* El interruptor se ve chico, pero el área de toque real es más grande */
+  padding: 12px 6px;
+  margin: -12px -6px;
 }
 .theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after {
   box-sizing: border-box;
@@ -921,8 +970,8 @@ p { color: var(--texto-secundario); }
   }
 }
 
-@media (min-width: 480px) {
-  .theme-switch { --toggle-size: 15px; }
+@media (min-width: 640px) {
+  .theme-switch { --toggle-size: 12px; }
 }
 
 /* --- WHATSAPP FLOTANTE --- */

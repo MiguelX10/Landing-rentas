@@ -16,6 +16,30 @@
     });
   }
 
+  /* Menú hamburguesa (móvil): despliega los links de navegación */
+  const navToggle = document.querySelector('[data-nav-toggle]');
+  const navMenu = document.querySelector('[data-nav-menu]');
+  if (navToggle && navMenu) {
+    const cerrarMenu = () => {
+      navToggle.setAttribute('aria-expanded', 'false');
+      navMenu.removeAttribute('data-open');
+    };
+    navToggle.addEventListener('click', () => {
+      const abierto = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!abierto));
+      navMenu.toggleAttribute('data-open', !abierto);
+    });
+    navMenu.querySelectorAll('a').forEach((enlace) => {
+      enlace.addEventListener('click', cerrarMenu);
+    });
+    document.addEventListener('click', (evento) => {
+      if (!navToggle.contains(evento.target) && !navMenu.contains(evento.target)) cerrarMenu();
+    });
+    document.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Escape') cerrarMenu();
+    });
+  }
+
   const nav = document.querySelector('[data-nav]');
   const barraProgreso = document.querySelector('[data-progreso-scroll]');
   const heroImg = document.querySelector('.hero__media img');

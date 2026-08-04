@@ -28,7 +28,7 @@ Un municipio de ~30,000 habitantes no tiene volumen de búsqueda en Google para 
 
 ## Fotos
 
-Se procesaron 8 fotos reales del lugar (HEIC → WebP, 3 anchos cada una: 640/1280/1920, calidad 80). El mínimo recomendado por el plan de trabajo era 12 — quedó documentado como pendiente para una siguiente sesión de fotos (ver "Con más tiempo").
+Se procesaron 12 fotos reales del lugar (HEIC/JPG → WebP, 3 anchos cada una, calidad 80) — se alcanzó el mínimo de 12 que pedía el plan de trabajo, incluyendo la vista amplia del jardín, el kiosco de botanas y la alberca con gente disfrutándola.
 
 ## SEO local
 

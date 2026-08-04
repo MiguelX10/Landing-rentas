@@ -55,6 +55,37 @@
     solicitarTick();
   });
 
+  /* Formulario de contacto: arma el mensaje de WhatsApp con nombre, teléfono y fecha */
+  const formContacto = document.querySelector('[data-form-whatsapp]');
+  if (formContacto) {
+    const inputFecha = formContacto.querySelector('#contacto-fecha');
+    const hoy = new Date();
+    const hoyISO = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+    inputFecha.min = hoyISO;
+
+    formContacto.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+      if (!formContacto.reportValidity()) return;
+
+      const nombre = formContacto.nombre.value.trim();
+      const telefono = formContacto.telefono.value.trim();
+
+      const [anio, mes, dia] = formContacto.fecha.value.split('-').map(Number);
+      const fechaTexto = new Date(anio, mes - 1, dia).toLocaleDateString('es-MX', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+
+      const mensaje =
+        `Hola, soy ${nombre}. Mi número es ${telefono}. ` +
+        `Quiero consultar si tienen disponibilidad para el ${fechaTexto}.`;
+
+      window.location.href = `https://wa.me/523312615339?text=${encodeURIComponent(mensaje)}`;
+    });
+  }
+
   /* Botón flotante de WhatsApp: aparece después del hero */
   const flotante = document.querySelector('[data-whatsapp-flotante]');
   if (flotante && hero) {

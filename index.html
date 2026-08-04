@@ -75,6 +75,7 @@
       <a href="#galeria">Galería</a>
       <a href="#precio">Precio</a>
       <a href="#como-llegar">Cómo llegar</a>
+      <a href="#contacto">Contacto</a>
       <a class="btn btn--cta btn--small" href="https://wa.me/523312615339?text=Hola%2C%20vi%20la%20p%C3%A1gina%20de%20Casa%20Palmera%20y%20quiero%20consultar%20disponibilidad%20de%20la%20terraza">WhatsApp</a>
     </nav>
   </div>
@@ -402,14 +403,31 @@
     </div>
   </section>
 
-  <!-- CTA FINAL -->
-  <section class="cta-final" aria-label="Contacto">
+  <!-- CONTACTO -->
+  <section class="contacto" id="contacto" aria-label="Contacto">
     <div class="contenedor">
-      <h2>¿Ya tienes fecha en mente?</h2>
-      <p>Escríbenos por WhatsApp y checamos disponibilidad de una vez.</p>
-      <a class="btn btn--cta btn--large" href="https://wa.me/523312615339?text=Hola%2C%20vi%20la%20p%C3%A1gina%20de%20Casa%20Palmera%20y%20quiero%20consultar%20disponibilidad%20de%20la%20terraza">
-        Consultar disponibilidad
-      </a>
+      <h2 class="titulo-seccion" data-reveal>¿Ya tienes fecha en mente?</h2>
+      <p class="contacto__intro" data-reveal>Déjanos tus datos y la fecha de tu evento. Te abrimos WhatsApp con todo listo para preguntar disponibilidad.</p>
+
+      <form class="contacto__form" data-form-whatsapp data-reveal novalidate>
+        <div class="campo">
+          <label for="contacto-nombre">Nombre</label>
+          <input type="text" id="contacto-nombre" name="nombre" autocomplete="name" required minlength="2" placeholder="Tu nombre">
+        </div>
+
+        <div class="campo">
+          <label for="contacto-telefono">Teléfono / WhatsApp</label>
+          <input type="tel" id="contacto-telefono" name="telefono" autocomplete="tel" inputmode="tel" required
+            pattern="[0-9+\s\-()]{10,15}" title="Al menos 10 dígitos" placeholder="33 1234 5678">
+        </div>
+
+        <div class="campo campo--fecha">
+          <label for="contacto-fecha">Fecha del evento</label>
+          <input type="date" id="contacto-fecha" name="fecha" required>
+        </div>
+
+        <button type="submit" class="btn btn--cta btn--large campo--full">Consultar disponibilidad por WhatsApp</button>
+      </form>
     </div>
   </section>
 

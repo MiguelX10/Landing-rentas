@@ -631,20 +631,58 @@ p { color: var(--concreto); }
 .faq__item[open] summary::after { transform: rotate(45deg); }
 .faq__item p { margin-top: 0.75rem; max-width: 65ch; }
 
-/* --- CTA FINAL --- */
-.cta-final {
+/* --- CONTACTO --- */
+.contacto {
   padding-block: var(--espacio-xl);
   text-align: center;
   background: linear-gradient(180deg, var(--cal), var(--vara) 220%);
 }
-.cta-final h2 {
-  font-size: var(--paso-3);
-  color: var(--agua-honda);
-  margin-bottom: 0.5rem;
-}
-.cta-final p {
+.contacto .titulo-seccion { margin-bottom: 0.5rem; }
+.contacto__intro {
   margin-bottom: var(--espacio-m);
   font-size: var(--paso-1);
+  max-width: 55ch;
+  margin-inline: auto;
+}
+
+.contacto__form {
+  display: grid;
+  gap: var(--espacio-s);
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: left;
+}
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.campo label {
+  font-weight: 600;
+  font-size: var(--paso--1);
+  color: var(--agua-honda);
+}
+.campo input {
+  min-height: 44px;
+  padding: 0.75em 1em;
+  border-radius: 10px;
+  border: 2px solid rgb(89 100 110 / 0.25);
+  background: var(--cal);
+  color: var(--agua-honda);
+  font-size: var(--paso-0);
+  font-family: var(--f-texto);
+  transition: border-color 0.15s ease;
+}
+.campo input:focus { border-color: var(--azulejo); }
+
+.campo--full {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+
+@media (min-width: 640px) {
+  .contacto__form { grid-template-columns: 1fr 1fr; }
+  .campo--fecha { grid-column: 1 / -1; }
 }
 
 /* --- FOOTER --- */

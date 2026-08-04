@@ -1,20 +1,62 @@
 (() => {
   'use strict';
 
-  /* Nav: fondo translúcido al bajar */
+  const prefiereMenosMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const nav = document.querySelector('[data-nav]');
-  if (nav) {
-    const onScroll = () => {
-      if (window.scrollY > 40) nav.setAttribute('data-scrolled', '');
+  const barraProgreso = document.querySelector('[data-progreso-scroll]');
+  const heroImg = document.querySelector('.hero__media img');
+  const hero = document.querySelector('.hero');
+
+  /* --- Loop único de scroll, dirigido por requestAnimationFrame ---
+     Todas las lecturas de layout (alturas) se cachean fuera del loop
+     para no forzar reflows en cada tick de scroll. */
+  let alturaDocumento = 0;
+  let alturaHero = 0;
+
+  const medirLayout = () => {
+    alturaDocumento = document.documentElement.scrollHeight - window.innerHeight;
+    alturaHero = hero ? hero.offsetHeight : 0;
+  };
+
+  let tickEnCurso = false;
+
+  const actualizarScroll = () => {
+    tickEnCurso = false;
+    const y = window.scrollY;
+
+    if (nav) {
+      if (y > 40) nav.setAttribute('data-scrolled', '');
       else nav.removeAttribute('data-scrolled');
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-  }
+    }
+
+    if (barraProgreso && alturaDocumento > 0) {
+      const progreso = Math.min(1, Math.max(0, y / alturaDocumento));
+      barraProgreso.style.transform = `scaleX(${progreso})`;
+    }
+
+    if (heroImg && !prefiereMenosMovimiento && y < alturaHero) {
+      heroImg.style.transform = `translateY(${y * 0.22}px)`;
+    }
+  };
+
+  const solicitarTick = () => {
+    if (!tickEnCurso) {
+      tickEnCurso = true;
+      requestAnimationFrame(actualizarScroll);
+    }
+  };
+
+  medirLayout();
+  actualizarScroll();
+  window.addEventListener('scroll', solicitarTick, { passive: true });
+  window.addEventListener('resize', () => {
+    medirLayout();
+    solicitarTick();
+  });
 
   /* Botón flotante de WhatsApp: aparece después del hero */
   const flotante = document.querySelector('[data-whatsapp-flotante]');
-  const hero = document.querySelector('.hero');
   if (flotante && hero) {
     const heroObserver = new IntersectionObserver(
       ([entry]) => {
@@ -26,9 +68,17 @@
     heroObserver.observe(hero);
   }
 
-  /* Scroll reveal */
-  const revealables = document.querySelectorAll('[data-reveal]');
+  /* Scroll reveal, con stagger automático entre hermanos del mismo contenedor */
+  const revealables = document.querySelectorAll('[data-reveal], [data-reveal-pop]');
   if (revealables.length) {
+    const contadorPorPadre = new Map();
+    revealables.forEach((el) => {
+      const padre = el.parentElement;
+      const indice = contadorPorPadre.get(padre) || 0;
+      contadorPorPadre.set(padre, indice + 1);
+      el.style.setProperty('--reveal-delay', `${Math.min(indice, 5) * 70}ms`);
+    });
+
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {

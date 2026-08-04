@@ -3,6 +3,19 @@
 
   const prefiereMenosMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Switch de modo claro/oscuro. El tema inicial ya lo aplica un script
+     inline en <head> (para no parpadear); aquí solo se sincroniza el
+     checkbox y se guarda el cambio cuando el usuario lo toca. */
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  if (themeToggle) {
+    themeToggle.checked = document.documentElement.getAttribute('data-theme') === 'dark';
+    themeToggle.addEventListener('change', () => {
+      const tema = themeToggle.checked ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', tema);
+      localStorage.setItem('tema', tema);
+    });
+  }
+
   const nav = document.querySelector('[data-nav]');
   const barraProgreso = document.querySelector('[data-progreso-scroll]');
   const heroImg = document.querySelector('.hero__media img');

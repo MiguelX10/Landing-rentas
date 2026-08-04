@@ -79,8 +79,11 @@
       });
 
       const mensaje =
-        `Hola, soy ${nombre}. Mi número es ${telefono}. ` +
-        `Quiero consultar si tienen disponibilidad para el ${fechaTexto}.`;
+        `Hola, quiero consultar disponibilidad:\n\n` +
+        `Nombre: ${nombre}\n` +
+        `Teléfono: ${telefono}\n` +
+        `Fecha: ${fechaTexto}\n\n` +
+        `¿Tienen disponibilidad para esa fecha?`;
 
       window.location.href = `https://wa.me/523312615339?text=${encodeURIComponent(mensaje)}`;
     });

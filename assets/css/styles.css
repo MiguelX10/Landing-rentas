@@ -314,8 +314,7 @@ p { color: var(--texto-secundario); }
 /* --- HERO (elemento firma) --- */
 .hero {
   position: relative;
-  height: 100svh;
-  min-height: 560px;
+  min-height: 100svh;
   overflow: hidden;
   color: var(--blanco);
 }
@@ -338,15 +337,55 @@ p { color: var(--texto-secundario); }
 
 .hero__content {
   position: relative;
-  height: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-l);
+  padding: var(--espacio-l) 1.5rem;
+  width: min(100% - 3rem, 1180px);
+  margin-inline: auto;
+}
+.hero__texto {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
   gap: 0.9rem;
-  padding: 0 1.5rem;
-  width: min(100% - 3rem, 1180px);
-  margin-inline: auto;
+}
+
+/* Tarjeta del formulario, flotando sobre la foto */
+.hero__formulario {
+  width: 100%;
+  max-width: 420px;
+  background: var(--superficie);
+  border-radius: var(--radio);
+  padding: var(--espacio-m);
+  box-shadow: 0 24px 48px -16px rgb(0 0 0 / 0.45);
+}
+.hero__formulario-titulo {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--paso-1);
+  color: var(--texto);
+  margin-bottom: var(--espacio-s);
+}
+
+@media (min-width: 900px) {
+  .hero__content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    text-align: left;
+  }
+  /* min-width:0 deja que el bloque de texto se pueda encoger de verdad;
+     sin esto, flexbox nunca lo achica más allá del ancho del título
+     (que es enorme por el font-size), y empuja la tarjeta fuera del contenedor. */
+  .hero__texto { flex: 1 1 420px; min-width: 0; }
+  .hero__formulario { flex: 0 1 400px; }
 }
 
 /* La línea de flotación: el título se parte en dos capas.
@@ -383,8 +422,6 @@ p { color: var(--texto-secundario); }
   color: var(--reflejo);
   font-weight: 600;
 }
-.hero .btn--cta { margin-top: 0.75rem; }
-
 @media (prefers-reduced-motion: reduce) {
   .hero__title-line--bottom { filter: none; }
 }
@@ -757,11 +794,6 @@ p { color: var(--texto-secundario); }
 .campo--full {
   grid-column: 1 / -1;
   justify-self: center;
-}
-
-@media (min-width: 640px) {
-  .contacto__form { grid-template-columns: 1fr 1fr; }
-  .campo--fecha { grid-column: 1 / -1; }
 }
 
 /* --- FOOTER --- */

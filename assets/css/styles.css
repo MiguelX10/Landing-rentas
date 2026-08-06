@@ -108,6 +108,11 @@ table { border-collapse: collapse; width: 100%; }
    ========================================================================== */
 html { scroll-behavior: smooth; }
 
+section[id] { scroll-margin-top: 5.5rem; }
+@media (min-width: 640px) {
+  section[id] { scroll-margin-top: 6.5rem; }
+}
+
 html { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
@@ -193,12 +198,15 @@ p { color: var(--texto-secundario); }
 }
 .btn:hover { transform: translateY(-2px); }
 
+/* --cuero-oscuro (~5.08:1 con blanco) pasa 4.5:1 a tamaño normal.
+   --cuero (~3.57:1) solo pasa como texto grande (3:1), por eso
+   .btn--large lo reintroduce explícitamente más abajo. */
 .btn--cta {
-  background: var(--cuero);
+  background: var(--cuero-oscuro);
   color: var(--blanco);
   box-shadow: var(--sombra);
 }
-.btn--cta:hover { background: var(--cuero-oscuro); }
+.btn--cta:hover { background: #8A4F18; }
 
 /* Brillo que cruza el botón al pasar el cursor */
 .btn--cta::before {
@@ -222,7 +230,14 @@ p { color: var(--texto-secundario); }
 }
 .btn--outline:hover { background: var(--texto); color: var(--bg); }
 
-.btn--large { padding: 1.1em 2.25em; font-size: var(--paso-1); }
+/* A este tamaño (--paso-1, negrita) el texto ya califica como "grande"
+   bajo WCAG (≥18.66px), así que --cuero sí pasa el umbral de 3:1. */
+.btn--large {
+  padding: 1.1em 2.25em;
+  font-size: var(--paso-1);
+  background: var(--cuero);
+}
+.btn--large:hover { background: var(--cuero-oscuro); }
 
 /* Texto pequeño: --cuero no pasa 4.5:1 con blanco a este tamaño, se usa la variante oscura */
 .btn--small {
@@ -368,7 +383,23 @@ p { color: var(--texto-secundario); }
 .hero__scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgb(10 30 40 / 0.35) 0%, rgb(10 30 40 / 0.1) 35%, rgb(10 40 55 / 0.55) 100%);
+  background: linear-gradient(
+    105deg,
+    rgb(7 36 48 / 0.70) 0%,
+    rgb(7 36 48 / 0.40) 45%,
+    rgb(10 40 55 / 0.15) 75%,
+    rgb(10 40 55 / 0.45) 100%
+  );
+}
+@media (max-width: 899px) {
+  .hero__scrim {
+    background: linear-gradient(
+      180deg,
+      rgb(7 36 48 / 0.55) 0%,
+      rgb(7 36 48 / 0.35) 40%,
+      rgb(10 40 55 / 0.75) 100%
+    );
+  }
 }
 
 /* Brillos de agua: manchas de luz que se mueven despacio sobre la foto,
@@ -456,27 +487,72 @@ p { color: var(--texto-secundario); }
   .hero__formulario { flex: 0 1 400px; }
 }
 
-/* La línea de flotación: el título se parte en dos capas.
-   La de abajo se ve "sumergida" — más opacidad baja, ligero desplazamiento y blur. */
+/* La línea de flotación: el título se parte en dos capas, como si la
+   mitad de abajo estuviera bajo el agua. La refracción real desplaza
+   horizontalmente y tiñe (no desatura) — por eso la capa de abajo usa
+   --reflejo y translateX, no opacity ni translateY. */
+.hero__texto { position: relative; }
+.hero__texto::before {
+  content: "";
+  position: absolute;
+  inset: -2rem -3rem;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 30% 50%,
+    rgb(7 36 48 / 0.72) 0%,
+    rgb(7 36 48 / 0.45) 45%,
+    transparent 75%
+  );
+  pointer-events: none;
+}
+
 .hero__title {
   position: relative;
   font-size: var(--paso-5);
   color: var(--blanco);
   line-height: 0.95;
+  isolation: isolate;
 }
 .hero__title-line { display: block; }
 .hero__title-line--top {
-  clip-path: inset(0 0 48% 0);
+  clip-path: inset(0 0 50% 0);
 }
 .hero__title-line--bottom {
   position: absolute;
-  top: 0;
-  left: 0;
-  clip-path: inset(52% 0 0 0);
-  opacity: 0.45;
-  filter: blur(0.5px);
-  transform: translateY(6px) scaleY(1.06);
-  transform-origin: top;
+  inset: 0;
+  clip-path: inset(50% 0 0 0);
+  color: var(--reflejo);
+  opacity: 0.95;
+  transform: translateX(5px) scaleX(1.02);
+  transform-origin: center;
+  animation: refraccion 5s ease-in-out infinite alternate;
+}
+
+/* La ondulación es lo que vuelve legible el efecto: el ojo entiende
+   "agua en movimiento" antes que "texto mal alineado". */
+@keyframes refraccion {
+  0%   { transform: translateX(5px)  scaleX(1.015); }
+  50%  { transform: translateX(-2px) scaleX(1.03); }
+  100% { transform: translateX(4px)  scaleX(1.01); }
+}
+
+/* Línea de flotación explícita: hace que el corte se lea intencional */
+.hero__title::after {
+  content: "";
+  position: absolute;
+  left: -1.5%;
+  right: -1.5%;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-1px);
+  background: linear-gradient(90deg,
+    transparent,
+    rgb(255 255 255 / 0.9) 20%,
+    rgb(255 255 255 / 0.9) 80%,
+    transparent);
+  filter: blur(0.4px);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .hero__subtitle {
@@ -491,7 +567,10 @@ p { color: var(--texto-secundario); }
   font-weight: 600;
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero__title-line--bottom { filter: none; }
+  .hero__title-line--bottom {
+    animation: none;
+    transform: translateX(4px) scaleX(1.02);
+  }
 }
 
 /* --- FRANJA DE DATOS --- */
@@ -530,18 +609,22 @@ p { color: var(--texto-secundario); }
   box-shadow: var(--sombra);
 }
 
+/* Grid asimétrico: la primera foto (la mejor) ocupa 2x2, para romper
+   el efecto "catálogo" de celdas idénticas. */
 .galeria__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 150px;
   gap: 0.6rem;
 }
 .galeria__item {
   position: relative;
   border-radius: var(--radio);
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: auto;
   min-height: 44px;
 }
+.galeria__item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
 .galeria__item img {
   width: 100%;
   height: 100%;
@@ -569,7 +652,13 @@ p { color: var(--texto-secundario); }
 .galeria__item:focus-visible::after { opacity: 1; }
 
 @media (min-width: 720px) {
-  .galeria__grid { grid-template-columns: repeat(4, 1fr); gap: 0.85rem; }
+  .galeria__grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 190px;
+    gap: 0.85rem;
+  }
+  .galeria__item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .galeria__item:nth-child(6) { grid-column: span 2; }
 }
 
 .lightbox {
@@ -640,16 +729,18 @@ p { color: var(--texto-secundario); }
 .precio {
   position: relative;
   padding-block: var(--espacio-xl);
-  background: var(--vara);
+  background: var(--bg);
   overflow: hidden;
 }
+/* La trama de equipal se queda como acento (--cuero, opacidad baja);
+   el fondo ya no es --vara, ese amarillo no pertenece a la paleta de agua. */
 .precio__textura {
   position: absolute;
   inset: -20px 0 0 -20px;
   width: calc(100% + 20px);
   height: calc(100% + 20px);
   color: var(--cuero);
-  opacity: 0.08;
+  opacity: 0.06;
   animation: patron-flotar 50s linear infinite;
 }
 .precio .contenedor { position: relative; }
@@ -658,6 +749,25 @@ p { color: var(--texto-secundario); }
   from { transform: translate(0, 0); }
   to { transform: translate(-20px, -20px); }
 }
+
+.precio__contenido {
+  display: grid;
+  grid-template-columns: minmax(300px, 460px) 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .precio__contenido { grid-template-columns: 1fr; }
+  .precio__foto { display: none; }
+}
+
+.precio__foto {
+  border-radius: var(--radio);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: var(--sombra);
+}
+.precio__foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .precio__card {
   background: var(--superficie);
@@ -886,12 +996,17 @@ p { color: var(--texto-secundario); }
 }
 
 /* --- CONTACTO --- */
+/* En claro, --vara (arena) desentonaba con la paleta de agua; se
+   reemplaza por --panel. En oscuro sí funcionaba, se deja igual. */
 .contacto {
   position: relative;
   padding-block: var(--espacio-xl);
   text-align: center;
-  background: linear-gradient(180deg, var(--bg), var(--vara) 220%);
+  background: linear-gradient(180deg, var(--bg), var(--panel) 220%);
   overflow: hidden;
+}
+:root[data-theme="dark"] .contacto {
+  background: linear-gradient(180deg, var(--bg), var(--vara) 220%);
 }
 .contacto .titulo-seccion { margin-bottom: 0.5rem; }
 .contacto__intro {
@@ -939,7 +1054,7 @@ p { color: var(--texto-secundario); }
 /* --- FOOTER --- */
 .footer {
   background: var(--agua-honda);
-  color: rgb(244 248 248 / 0.85);
+  color: var(--cal);
   padding-block: var(--espacio-l);
 }
 .footer__inner {

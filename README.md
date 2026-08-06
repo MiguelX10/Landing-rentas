@@ -1,68 +1,73 @@
-# Casa Palmera — Terraza con alberca en Zacoalco de Torres
+# Casa Palmera
 
-Landing page estática para la renta por día de una terraza con alberca en Zacoalco de Torres, Jalisco. El objetivo es uno solo: que quien la abra se convenza con las fotos, entienda qué incluye y cuánto cuesta, y mande WhatsApp.
+Landing page para renta por día de una terraza con alberca en Zacoalco de Torres, Jalisco.
 
-Proyecto real, no un ejercicio — el contenido (precio, capacidad, reglamento) sale del contrato de arrendamiento real del lugar.
+🔗 https://landing-rentas.vercel.app
 
 ## El problema
 
-Un municipio de ~30,000 habitantes no tiene volumen de búsqueda en Google para "terraza con alberca en Zacoalco". El canal real es que el link se comparta por WhatsApp y Facebook. Eso cambia el diseño de la página: no se optimiza para posicionar, se optimiza para verse increíble cuando alguien la pega en un grupo de WhatsApp — de ahí que la imagen Open Graph reciba tanto cuidado como el propio hero.
+Casa Palmera es un lugar real: una terraza techada con alberca que se renta por día para eventos, en un municipio de ~30,000 habitantes en Jalisco. El precio ($3,500 MXN/día), la capacidad (50 personas) y el reglamento (horarios de alberca, qué no meter al agua, la advertencia de químicos) salen íntegros del contrato de arrendamiento real del lugar — nada de contenido inventado.
+
+Esta entrega es una demo para prácticas profesionales, no el sitio de producción del negocio. Eso cambió las prioridades a mitad de camino: en vez de perseguir dominio propio, `robots.txt`, Google Business Profile o analítica (cosas que solo importan con el sitio operando), el esfuerzo se puso en que el recorrido de quien revisa el proyecto — abrir el link, hacer scroll, picar los enlaces del nav, ver el código — no tenga nada roto. En una demo, un detalle roto pesa más que en producción, porque el acabado es lo único que se está midiendo.
+
+Aun así, el diseño respeta cómo se distribuiría en la vida real: en un pueblo chico, el canal es WhatsApp y Facebook, no la búsqueda orgánica, así que la página está pensada para convencer con fotos y convertir a un solo mensaje de WhatsApp, no para posicionar en Google.
 
 ## Decisiones de diseño
 
-- **Concepto "agua y equipal".** El agua (línea horizontal, tono azulejo) da la estructura; el equipal (Zacoalco es la capital del equipal) da la textura, vía una trama SVG tejida a 6-8% de opacidad en las secciones cálidas. Evita a propósito el look genérico de "salón de eventos" (crema + serif + terracota) que no dice nada del lugar.
-- **El hero se corta en la línea de flotación.** El H1 se divide en dos capas con `clip-path`: la mitad superior sólida, la inferior con menos opacidad y un ligero desplazamiento, simulando algo sumergido. Es el único momento llamativo de la página — todo lo demás es tranquilo a propósito. Se apaga con `prefers-reduced-motion`.
-- **Precio único, no paquetes inventados.** El contrato real solo define una renta de $3,500/día, no tiers de entre-semana/fin-de-semana/festivo. Se mostró tal cual en vez de inventar una estructura de precios que no existe — el brief explícitamente prohíbe cualquier "Lorem ipsum" o contenido no real.
-- **El reglamento es contenido, no relleno.** Sale íntegro del contrato (horarios de alberca, qué no meter al agua, la advertencia de químicos). Filtra clientes problema y ahorra la misma pregunta por WhatsApp veinte veces.
+- **Concepto "agua y equipal".** El agua (tono azulejo, franjas siempre-oscuras) da la estructura; el equipal (Zacoalco es la capital del equipal) da la textura, vía una trama SVG tejida a baja opacidad en las secciones cálidas. Evita a propósito el look genérico de "salón de eventos" que no dice nada del lugar.
+- **El hero se corta en la línea de flotación — y por qué cambió de vertical a horizontal.** El H1 se divide en dos capas: la mitad superior sólida, la inferior simulando estar bajo el agua. La primera versión desplazaba la capa de abajo *verticalmente* y le bajaba la opacidad — leía como un error de renderizado, no como refracción, porque el agua real desplaza horizontalmente y tiñe (no desatura) lo que está debajo. Se corrigió a un desplazamiento horizontal ondulante, la capa de abajo teñida con el color de acento del agua en vez de gris, y una línea de flotación explícita para que el corte se lea intencional. Probar un efecto, ver que no aterriza y corregirlo es el trabajo — no defender la primera versión porque ya estaba escrita.
+- **La foto del hero se eligió por legibilidad, no por ser "la más bonita".** La original era una toma vertical del azulejo y el borde de la alberca, en ángulo confuso — no se entendía qué se estaba viendo, y encima rompía el efecto del título al no tener zona oscura donde el texto se leyera. Se reemplazó por la foto de alberca con cascada, palmeras y cielo, horizontal, con una zona de sombra natural del lado izquierdo donde vive el texto.
+- **Precio único, no paquetes inventados.** El contrato real solo define una renta de $3,500/día, no tiers de entre-semana/fin-de-semana/festivo. Se mostró tal cual en vez de inventar una estructura de precios que no existe.
+- **El reglamento es contenido, no relleno.** Sale íntegro del contrato. Filtra clientes problema y ahorra la misma pregunta por WhatsApp veinte veces.
+- **Galería curada a 8 fotos, no las 12 originales.** Tres de las doce no aportaban: ángulos confusos, tomas nocturnas donde no se distinguía nada. Ocho fotos buenas convencen más que doce donde tres restan — el mismo criterio aplica a efectos y secciones, no solo a fotos. El grid además es asimétrico (la mejor foto ocupa 2×2) para romper el efecto "catálogo" de celdas idénticas.
 
 ## Decisiones técnicas
 
 | Decisión | Por qué |
 |---|---|
-| Vanilla HTML/CSS/JS, sin frameworks | Una landing de una sola página no necesita build step. Menos peso, menos que se rompa, y demuestra CSS real sin Tailwind |
-| WhatsApp como canal primario | Sitio estático sin backend; en México WhatsApp convierte mejor que un formulario que nadie revisa |
-| `<dialog>` nativo para el lightbox | Ya trae focus trap y cierre con Esc, cero JS de librería |
+| Vanilla HTML/CSS/JS, sin framework | Una landing de una sola página no necesita build step. Menos peso, menos superficie de error, despliegue directo |
+| Script de tema inline en `<head>` | Si esperara al `script.js` con `defer`, la página parpadearía en claro antes de cambiar a oscuro |
+| Lecturas de layout cacheadas fuera del loop de scroll | Leer `scrollHeight` en cada tick de scroll fuerza un reflow y traba el hilo principal |
+| WhatsApp en vez de formulario con backend | Sitio estático sin backend; en México WhatsApp convierte mejor que un formulario que nadie revisa |
+| `<dialog>` nativo para el lightbox | Focus trap y cierre con Esc de fábrica, cero JS de librería |
 | `<details>/<summary>` para el FAQ | Accesible de nacimiento |
-| Fuentes auto-hospedadas (no `fonts.googleapis.com`) | Ver sección de performance — elimina una cadena de peticiones externa completa |
-| `IntersectionObserver` para scroll reveal | No hay listeners de `scroll` bloqueando el hilo principal |
-
-## Fotos
-
-Se procesaron 12 fotos reales del lugar (HEIC/JPG → WebP, 3 anchos cada una, calidad 80) — se alcanzó el mínimo de 12 que pedía el plan de trabajo, incluyendo la vista amplia del jardín, el kiosco de botanas y la alberca con gente disfrutándola.
-
-## SEO local
-
-- Open Graph completo con imagen 1200×630 generada a partir de la foto de la alberca de día, con overlay de texto — pensada para verse bien como tarjeta de WhatsApp, que es donde de verdad va a vivir esta página.
-- JSON-LD `LocalBusiness` con dirección, teléfono y capacidad — es el detalle que casi nadie pone en una landing de este tipo y es lo que Google usa para el panel local.
-- `sitemap.xml` + `robots.txt`, aunque sea una sola URL.
-- Fuera del código: para que esto funcione de verdad falta el Google Business Profile con el link a la landing (en un pueblo chico esto pesa más que el SEO on-page) y publicarla en grupos de Facebook locales y de eventos en GDL.
+| Fuentes auto-hospedadas, con `preload` | Elimina una cadena de peticiones externa completa a `fonts.googleapis.com` — fue el cambio de mayor impacto real en Performance |
+| `IntersectionObserver` para contadores y scroll-reveal | No hay listeners de `scroll` bloqueando el hilo principal |
 
 ## Accesibilidad
 
-Contraste verificado con axe/Lighthouse, no a ojo. `--cuero` (el color de acción) no pasa 4.5:1 con texto blanco a tamaños normales — se resolvió reservándolo para botones grandes en negrita (que sí califican como "texto grande" bajo WCAG, umbral 3:1) y usando una variante más oscura (`--cuero-oscuro`) en el botón pequeño del nav, que sí necesita el 4.5:1 completo.
+- HTML semántico, un solo `<h1>`, jerarquía de encabezados sin saltos
+- Contraste verificado con la calculadora de contraste WCAG y confirmado con Lighthouse/axe, no a ojo — incluyendo un par de bugs reales que se encontraron así: `.btn--cta` con `--cuero` no pasaba 4.5:1 a tamaño normal (se resolvió con `--cuero-oscuro`, reservando `--cuero` para botones grandes en negrita, que sí califican como "texto grande" bajo WCAG); el texto del footer tampoco pasaba (4.37:1) y se corrigió a `--cal`
+- `:focus-visible` propio, navegable 100% con teclado
+- `prefers-reduced-motion` respetado sección por sección, no solo en el reset global
+- Skip link, `alt` descriptivos en cada foto, áreas táctiles de 44px
+- Los contadores (`50 personas`, `$3,500`) tienen el valor real escrito en el HTML estático — el JS solo los anima desde cero; si el JS falla o Google indexa antes de que corra, no se ve "0 personas" ni "$0 MXN"
 
-## Performance — resultados reales de Lighthouse
+## Rendimiento — resultados reales de Lighthouse
 
 Corrido en local (`npx lighthouse`), no son números inventados. Reporte completo en `docs/lighthouse-report.jpg`.
 
 | Categoría | Score |
 |---|---|
-| Performance | **85** |
+| Performance | **80** |
 | Accessibility | **100** |
 | Best Practices | **100** |
 | SEO | **100** |
 
-**Sobre el 85 de Performance:** las tres métricas que dependen de trabajo real (Total Blocking Time, Cumulative Layout Shift, First Contentful Paint) están en verde — CLS es 0 y FCP es 1.1s. La única métrica en rojo es el Largest Contentful Paint reportado (4.4s), pero el desglose interno de Lighthouse (`lcp-breakdown-insight`) muestra que el tiempo *real* de carga y render del elemento LCP es de ~140ms; el resto es la simulación de red 4G lenta que Lighthouse aplica por defecto sin importar que el servidor sea local. Es una limitante del método de medición, no del código — en el deploy real sobre la CDN de Vercel debería medir aún mejor.
+**Sobre el 80 de Performance:** las métricas que dependen de trabajo real están en verde — Cumulative Layout Shift es 0, First Contentful Paint 1.1s, Total Blocking Time 0ms. La única métrica en rojo es el Largest Contentful Paint reportado (5.6s), pero el desglose interno de Lighthouse (`lcp-breakdown-insight`) muestra que el tiempo *real* de carga y render del elemento LCP suma ~195ms; el resto es la simulación de red 4G lenta que Lighthouse aplica por defecto sin importar que el servidor sea local. Es una limitante del método de medición, no del código — en el deploy real sobre la CDN de Vercel debería medir mejor.
 
-Antes de auto-hospedar las fuentes (se cargaban desde `fonts.googleapis.com`), el Performance era 77 y el FCP 3.0s. Ese fue el cambio de más impacto real de toda la sesión de optimización.
+## Alcance
 
-## Qué haría con más tiempo
+Se resolvió como single-page estática porque el objetivo de esta entrega es demostrar el trabajo de front-end, no operar un negocio. Fuera de alcance a propósito, aunque valga la pena mencionarlo:
 
-1. **Completar el set de fotos.** Van 8, faltan tomas de día del área techada vacía, el asador, los baños, el estacionamiento y una toma amplia del entorno (cerros/cielo abierto) — es la ventaja competitiva real contra una terraza urbana y hoy no está en la galería.
-2. **Foto de alberca al atardecer.** El plan la pedía como la imagen que más vende; lo que hay es de día y de noche, falta la hora dorada.
-3. **Confirmar redes sociales** del lugar para enlazarlas en el footer.
-4. **Perseguir el 95+ de Performance** con imágenes AVIF además de WebP, aunque como se explica arriba el score actual ya refleja una carga real rápida.
-5. **Dominio propio y deploy en Vercel** (Fase 8 del plan de trabajo) — hoy corre en local con `python3 -m http.server`.
+- Dominio propio (`casapalmera.mx`), DNS, `robots.txt` y `sitemap.xml` apuntando a un sitio en producción
+- Google Business Profile y Search Console
+- Facebook Page y publicación en grupos locales — en un pueblo chico esto pesa más que el SEO on-page
+- Analítica de conversión (Vercel Analytics o similar)
+- Backend real de disponibilidad (por ejemplo Cal.com) en vez de "manda WhatsApp y checamos"
+- Panel administrable para la galería, en vez de HTML estático
+
+Una versión de producción real sumaría todo lo anterior más separación en componentes si el sitio creciera más allá de una sola página.
 
 ## Cómo correrlo en local
 

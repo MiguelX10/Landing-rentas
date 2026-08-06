@@ -46,16 +46,16 @@ table { border-collapse: collapse; width: 100%; }
   /* Agua — paleta fija. --agua-honda y --cal no cambian con el tema:
      son el par oscuro/claro fijo de las franjas siempre-oscuras
      (datos, reglamento, footer), que se ven igual en los dos modos. */
-  --agua-honda:  #0A4A63;
-  --azulejo:     #1595B6;
-  --reflejo:     #8AD5E5;
-  --cal:         #F4F8F8;
-  --concreto:    #59646E;
+  --agua-honda:  #0B6E8C;
+  --azulejo:     #12ABD1;
+  --reflejo:     #7FE3F0;
+  --cal:         #F1FAFC;
+  --concreto:    #4D6470;
 
   /* Equipal — calor y acción */
-  --cuero:       #B8763C;
-  --cuero-oscuro:#96602F;
-  --vara:        #D9C4A3;
+  --cuero:       #C67228;
+  --cuero-oscuro:#A05E1E;
+  --vara:        #F4E4C4;
 
   --blanco: #FFFFFF;
 
@@ -63,6 +63,7 @@ table { border-collapse: collapse; width: 100%; }
      El resto del CSS usa estos, no la paleta fija de arriba. */
   --bg:                var(--cal);
   --superficie:        var(--blanco);
+  --panel:             #C9EEF7;
   --texto:             var(--agua-honda);
   --texto-secundario:  var(--concreto);
   --borde:             rgb(89 100 110 / 0.2);
@@ -86,18 +87,19 @@ table { border-collapse: collapse; width: 100%; }
   --espacio-xl: clamp(4rem, 3rem + 5vw, 7rem);
 
   --radio: 14px;
-  --sombra: 0 12px 32px -12px rgb(10 74 99 / 0.25);
+  --sombra: 0 12px 32px -12px rgb(11 110 140 / 0.25);
 }
 
 /* Modo oscuro: solo se redefinen los tokens de tema (no la paleta fija) */
 :root[data-theme="dark"] {
-  --bg:               #0B1B23;
-  --superficie:       #142832;
-  --texto:            #EAF3F5;
-  --texto-secundario: #9FB4BD;
-  --azulejo:          #3FC3E0;
-  --vara:             #2E2313;
-  --borde:            rgb(159 180 189 / 0.25);
+  --bg:               #072430;
+  --superficie:       #0E3A47;
+  --panel:            #1B5468;
+  --texto:            #EAFBFF;
+  --texto-secundario: #9FD3E0;
+  --azulejo:          #2FD6F5;
+  --vara:             #3A2818;
+  --borde:            rgb(159 211 224 / 0.25);
   --sombra: 0 12px 32px -12px rgb(0 0 0 / 0.45);
 }
 
@@ -185,6 +187,8 @@ p { color: var(--texto-secundario); }
   font-weight: 700;
   font-size: var(--paso-0);
   min-height: 44px;
+  position: relative;
+  overflow: hidden;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .btn:hover { transform: translateY(-2px); }
@@ -195,6 +199,21 @@ p { color: var(--texto-secundario); }
   box-shadow: var(--sombra);
 }
 .btn--cta:hover { background: var(--cuero-oscuro); }
+
+/* Brillo que cruza el botón al pasar el cursor */
+.btn--cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgb(255 255 255 / 0.4), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+.btn--cta:hover::before { left: 130%; }
 
 .btn--outline {
   background: transparent;
@@ -229,7 +248,7 @@ p { color: var(--texto-secundario); }
 }
 .nav[data-scrolled] {
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 20px -8px rgb(10 74 99 / 0.2);
+  box-shadow: 0 2px 20px -8px rgb(11 110 140 / 0.2);
 }
 .nav__inner {
   width: min(100% - 1.5rem, 1180px);
@@ -308,6 +327,23 @@ p { color: var(--texto-secundario); }
     min-height: auto;
     padding: 0;
     border: 0;
+    position: relative;
+  }
+  .nav__links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35em;
+    height: 2px;
+    background: var(--cuero);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .nav__links a:hover::after,
+  .nav__links a:focus-visible::after {
+    transform: scaleX(1);
   }
 }
 
@@ -335,8 +371,35 @@ p { color: var(--texto-secundario); }
   background: linear-gradient(180deg, rgb(10 30 40 / 0.35) 0%, rgb(10 30 40 / 0.1) 35%, rgb(10 40 55 / 0.55) 100%);
 }
 
+/* Brillos de agua: manchas de luz que se mueven despacio sobre la foto,
+   como el reflejo del sol en una alberca. mix-blend-mode las funde con
+   la foto en vez de verse como una capa encima. */
+.hero__reflejos {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgb(255 255 255 / 0.55), transparent 38%),
+    radial-gradient(circle at 75% 65%, rgb(190 245 255 / 0.5), transparent 34%),
+    radial-gradient(circle at 45% 85%, rgb(255 255 255 / 0.35), transparent 30%);
+  background-size: 160% 160%;
+  animation: reflejos-flotar 16s ease-in-out infinite alternate;
+}
+@keyframes reflejos-flotar {
+  0%   { background-position: 0% 10%, 100% 90%, 40% 100%; }
+  50%  { background-position: 25% 35%, 70% 60%, 15% 70%; }
+  100% { background-position: 5% 0%, 90% 100%, 45% 90%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__reflejos { animation: none; }
+}
+
 .hero__content {
   position: relative;
+  z-index: 2;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -363,6 +426,11 @@ p { color: var(--texto-secundario); }
   border-radius: var(--radio);
   padding: var(--espacio-m);
   box-shadow: 0 24px 48px -16px rgb(0 0 0 / 0.45);
+  animation: flotar 7s ease-in-out infinite;
+}
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 .hero__formulario-titulo {
   font-family: var(--f-display);
@@ -442,6 +510,7 @@ p { color: var(--texto-secundario); }
   font-weight: 600;
   font-size: var(--paso--1);
   letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
 }
 .datos__lista li { white-space: nowrap; }
 .datos__lista li:not(:last-child)::after {
@@ -453,29 +522,54 @@ p { color: var(--texto-secundario); }
 /* --- GALERÍA --- */
 .galeria { padding-block: var(--espacio-xl); }
 
+.galeria__panel {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: var(--espacio-m);
+  box-shadow: var(--sombra);
+}
+
 .galeria__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.6rem;
 }
 .galeria__item {
+  position: relative;
   border-radius: var(--radio);
   overflow: hidden;
   aspect-ratio: 4 / 3;
   min-height: 44px;
 }
-.galeria__item--grande { grid-column: span 2; }
 .galeria__item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.35s ease;
 }
-.galeria__item:hover img { transform: scale(1.04); }
+.galeria__item:hover img,
+.galeria__item:focus-visible img { transform: scale(1.04); }
+
+.galeria__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 55%, rgb(8 18 24 / 0.55)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.3-4.3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center, center;
+  background-size: cover, 28px 28px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.galeria__item:hover::after,
+.galeria__item:focus-visible::after { opacity: 1; }
 
 @media (min-width: 720px) {
   .galeria__grid { grid-template-columns: repeat(4, 1fr); gap: 0.85rem; }
-  .galeria__item--grande { grid-column: span 2; grid-row: span 1; }
 }
 
 .lightbox {
@@ -551,13 +645,19 @@ p { color: var(--texto-secundario); }
 }
 .precio__textura {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -20px 0 0 -20px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
   color: var(--cuero);
   opacity: 0.08;
+  animation: patron-flotar 50s linear infinite;
 }
 .precio .contenedor { position: relative; }
+
+@keyframes patron-flotar {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-20px, -20px); }
+}
 
 .precio__card {
   background: var(--superficie);
@@ -574,6 +674,7 @@ p { color: var(--texto-secundario); }
   display: flex;
   align-items: baseline;
   gap: 0.4em;
+  font-variant-numeric: tabular-nums;
 }
 .precio__moneda {
   font-family: var(--f-texto);
@@ -611,6 +712,27 @@ p { color: var(--texto-secundario); }
 .apartar__pasos {
   display: grid;
   gap: var(--espacio-m);
+  position: relative;
+}
+/* Línea que conecta los 3 pasos, se "dibuja" al entrar en pantalla */
+.apartar__pasos::before {
+  content: "";
+  display: none;
+}
+@media (min-width: 720px) {
+  .apartar__pasos::before {
+    display: block;
+    position: absolute;
+    top: 1.25em;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--borde);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1s var(--reveal-curva) 0.25s;
+  }
+  .apartar__pasos[data-visible]::before { transform: scaleX(1); }
 }
 .apartar__numero {
   display: inline-flex;
@@ -640,11 +762,12 @@ p { color: var(--texto-secundario); }
 }
 .reglamento__textura {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -20px 0 0 -20px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
   color: var(--reflejo);
   opacity: 0.06;
+  animation: patron-flotar 60s linear infinite reverse;
 }
 .reglamento .contenedor { position: relative; }
 .reglamento__intro {
@@ -690,6 +813,13 @@ p { color: var(--texto-secundario); }
   color: var(--texto-secundario);
   margin-bottom: var(--espacio-m);
   font-size: var(--paso-1);
+}
+.llegar__panel {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: var(--espacio-m);
+  box-shadow: var(--sombra);
 }
 .llegar__layout {
   display: grid;
@@ -746,12 +876,22 @@ p { color: var(--texto-secundario); }
 }
 .faq__item[open] summary::after { transform: rotate(45deg); }
 .faq__item p { margin-top: 0.75rem; max-width: 65ch; }
+.faq__item[open] p { animation: faq-entra 0.3s ease; }
+@keyframes faq-entra {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq__item[open] p { animation: none; }
+}
 
 /* --- CONTACTO --- */
 .contacto {
+  position: relative;
   padding-block: var(--espacio-xl);
   text-align: center;
   background: linear-gradient(180deg, var(--bg), var(--vara) 220%);
+  overflow: hidden;
 }
 .contacto .titulo-seccion { margin-bottom: 0.5rem; }
 .contacto__intro {
@@ -1033,23 +1173,66 @@ p { color: var(--texto-secundario); }
 }
 .whatsapp-flotante .icono { width: 28px; height: 28px; }
 
-/* --- SCROLL REVEAL --- */
+.whatsapp-flotante::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  opacity: 0;
+  pointer-events: none;
+}
+.whatsapp-flotante[data-visible]::before {
+  animation: pulso-whatsapp 2.4s ease-out infinite;
+}
+@keyframes pulso-whatsapp {
+  0% { transform: scale(0.9); opacity: 0.55; }
+  70% { transform: scale(1.45); opacity: 0; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-flotante[data-visible]::before { animation: none; }
+}
+
+/* --- SCROLL REVEAL ---
+   Curva "ease-out-expo": arranca rápido y frena suave, se siente más
+   premium que un ease lineal. Varias variantes para que no todo entre
+   igual — le da ritmo a la página en vez de un solo gesto repetido. */
+:root {
+  --reveal-curva: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 [data-reveal] {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(36px) scale(0.97);
+  transition: opacity 0.7s var(--reveal-curva), transform 0.7s var(--reveal-curva);
   transition-delay: var(--reveal-delay, 0ms);
 }
 [data-reveal][data-visible] {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+}
+
+/* Entra deslizando desde la izquierda/derecha — para columnas pareadas */
+[data-reveal-izq],
+[data-reveal-der] {
+  opacity: 0;
+  transition: opacity 0.75s var(--reveal-curva), transform 0.75s var(--reveal-curva);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal-izq] { transform: translateX(-56px); }
+[data-reveal-der] { transform: translateX(56px); }
+[data-reveal-izq][data-visible],
+[data-reveal-der][data-visible] {
+  opacity: 1;
+  transform: none;
 }
 
 /* Variante con leve rebote de escala, para acentos puntuales (ej. los números de "Cómo apartar") */
 [data-reveal-pop] {
   opacity: 0;
-  transform: scale(0.6);
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: scale(0.5);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   transition-delay: var(--reveal-delay, 0ms);
 }
 [data-reveal-pop][data-visible] {
@@ -1058,7 +1241,11 @@ p { color: var(--texto-secundario); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal], [data-reveal-pop] { opacity: 1; transform: none; transition: none; }
+  [data-reveal], [data-reveal-pop], [data-reveal-izq], [data-reveal-der] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* --- BARRA DE PROGRESO DE SCROLL --- */

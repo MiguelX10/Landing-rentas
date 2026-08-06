@@ -134,6 +134,7 @@
            width="1920" height="1440" fetchpriority="high">
     </picture>
     <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="hero__reflejos" aria-hidden="true"></div>
 
     <div class="hero__content">
       <div class="hero__texto">
@@ -173,7 +174,7 @@
   <!-- FRANJA DE DATOS DUROS -->
   <section class="datos" aria-label="Datos del lugar">
     <ul class="datos__lista">
-      <li>50 personas máx.</li>
+      <li><span data-contador="50">0</span> personas máx.</li>
       <li>Alberca</li>
       <li>Asador</li>
       <li>Área techada</li>
@@ -186,9 +187,10 @@
   <section class="galeria" id="galeria" aria-label="Galería de fotos">
     <div class="contenedor">
       <h2 class="titulo-seccion" data-reveal>La terraza y la alberca</h2>
+      <div class="galeria__panel" data-reveal>
       <div class="galeria__grid" data-galeria>
 
-        <button class="galeria__item galeria__item--grande" type="button" data-lightbox-abrir="0" data-reveal>
+        <button class="galeria__item" type="button" data-lightbox-abrir="0" data-reveal>
           <img loading="lazy" width="1280" height="960"
             src="/assets/images/galeria/galeria-01-alberca-cascada-1280.webp"
             srcset="/assets/images/galeria/galeria-01-alberca-cascada-640.webp 640w,
@@ -238,7 +240,7 @@
             alt="Equipo de sonido y luces durante un evento nocturno en Casa Palmera">
         </button>
 
-        <button class="galeria__item galeria__item--grande" type="button" data-lightbox-abrir="5" data-reveal>
+        <button class="galeria__item" type="button" data-lightbox-abrir="5" data-reveal>
           <img loading="lazy" width="1280" height="960"
             src="/assets/images/galeria/galeria-04-alberca-noche-jardin-1280.webp"
             srcset="/assets/images/galeria/galeria-04-alberca-noche-jardin-640.webp 640w,
@@ -258,7 +260,7 @@
             alt="Invitados conviviendo junto a la alberca iluminada de Casa Palmera">
         </button>
 
-        <button class="galeria__item galeria__item--grande" type="button" data-lightbox-abrir="7" data-reveal>
+        <button class="galeria__item" type="button" data-lightbox-abrir="7" data-reveal>
           <img loading="lazy" width="1280" height="960"
             src="/assets/images/galeria/galeria-08-terraza-jardin-dia-1280.webp"
             srcset="/assets/images/galeria/galeria-08-terraza-jardin-dia-640.webp 640w,
@@ -278,7 +280,7 @@
             alt="Kiosco para botanas y bebidas de Casa Palmera, rodeado de jardín">
         </button>
 
-        <button class="galeria__item galeria__item--grande" type="button" data-lightbox-abrir="9" data-reveal>
+        <button class="galeria__item" type="button" data-lightbox-abrir="9" data-reveal>
           <img loading="lazy" width="1280" height="960"
             src="/assets/images/galeria/galeria-12-alberca-jardin-dia-1280.webp"
             srcset="/assets/images/galeria/galeria-12-alberca-jardin-dia-640.webp 640w,
@@ -309,6 +311,7 @@
         </button>
 
       </div>
+      </div>
     </div>
 
     <dialog class="lightbox" data-lightbox>
@@ -324,15 +327,15 @@
     <div class="contenedor">
       <h2 class="titulo-seccion" data-reveal>Qué incluye</h2>
       <ul class="incluye__grid">
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Alberca con cascada</li>
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Asador</li>
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Área techada / palapa</li>
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Kiosco para botanas y bebidas</li>
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Sonido</li>
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Vestidores y regaderas</li>
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Baños</li>
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Estacionamiento</li>
-        <li><svg class="icono" aria-hidden="true"><use href="#icono-check"/></svg> Wifi</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-alberca"/></svg> Alberca con cascada</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-asador"/></svg> Asador</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-palapa"/></svg> Área techada / palapa</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-kiosco"/></svg> Kiosco para botanas y bebidas</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-sonido"/></svg> Sonido</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-regadera"/></svg> Vestidores y regaderas</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-banos"/></svg> Baños</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-estacionamiento"/></svg> Estacionamiento</li>
+        <li data-reveal><svg class="icono" aria-hidden="true"><use href="#icono-wifi"/></svg> Wifi</li>
       </ul>
     </div>
   </section>
@@ -343,7 +346,7 @@
     <div class="contenedor">
       <h2 class="titulo-seccion" data-reveal>Precio</h2>
       <div class="precio__card" data-reveal>
-        <p class="precio__monto">$3,500<span class="precio__moneda">MXN / día</span></p>
+        <p class="precio__monto">$<span data-contador="3500">0</span><span class="precio__moneda">MXN / día</span></p>
         <ul class="precio__detalle">
           <li>Uso de la terraza de 11:00 a.m. a 11:00 p.m.</li>
           <li>Alberca disponible de 11:00 a.m. a 9:00 p.m.</li>
@@ -362,7 +365,7 @@
   <section class="apartar" aria-label="Cómo apartar tu fecha">
     <div class="contenedor">
       <h2 class="titulo-seccion" data-reveal>Cómo apartar tu fecha</h2>
-      <ol class="apartar__pasos">
+      <ol class="apartar__pasos" data-reveal>
         <li data-reveal>
           <span class="apartar__numero" data-reveal-pop>1</span>
           <h3>Consultas</h3>
@@ -390,7 +393,7 @@
       <p class="reglamento__intro">Contenido real del contrato de renta. Ayuda a que todos sepan qué esperar antes de llegar.</p>
 
       <div class="reglamento__columnas">
-        <div data-reveal>
+        <div data-reveal-izq>
           <h3>Horarios y capacidad</h3>
           <ul>
             <li>Uso del inmueble desde las 11:00 a.m.</li>
@@ -400,7 +403,7 @@
             <li>La terraza se entrega limpia y recogida, o se cobra limpieza extra</li>
           </ul>
         </div>
-        <div>
+        <div data-reveal-der>
           <h3>Uso de la alberca</h3>
           <ul>
             <li>Traje de baño obligatorio para entrar al agua</li>
@@ -425,8 +428,9 @@
       <h2 class="titulo-seccion" data-reveal>Cómo llegar</h2>
       <p class="llegar__direccion">Calle Ocampo 188-B, Colonia Las Cebollas, Zacoalco de Torres, Jalisco</p>
 
+      <div class="llegar__panel" data-reveal>
       <div class="llegar__layout">
-        <div class="llegar__mapa">
+        <div class="llegar__mapa" data-reveal-izq>
           <iframe
             title="Mapa de Casa Palmera en Zacoalco de Torres"
             src="https://www.google.com/maps?q=Calle+Ocampo+188-B,+Las+Cebollas,+Zacoalco+de+Torres,+Jalisco&output=embed"
@@ -435,7 +439,7 @@
           </iframe>
         </div>
 
-        <div class="llegar__tiempos">
+        <div class="llegar__tiempos" data-reveal-der>
           <table>
             <caption class="sr-only">Tiempos aproximados de traslado</caption>
             <thead>
@@ -452,6 +456,7 @@
           </a>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
@@ -460,52 +465,52 @@
     <div class="contenedor">
       <h2 class="titulo-seccion" data-reveal>Preguntas frecuentes</h2>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Cuánto cuesta rentar Casa Palmera?</summary>
         <p>$3,500 MXN por día de uso, más un depósito en garantía de $500 MXN que se devuelve si el lugar se entrega en las mismas condiciones en que se recibió.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Cuántas personas caben?</summary>
         <p>Hasta 50 personas. Si se rebasa el límite, se cobra un monto adicional.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Qué horario tiene la alberca?</summary>
         <p>La alberca está disponible de 11:00 a.m. a 9:00 p.m. Fuera de ese horario no se puede usar, porque se aplican productos químicos de mantenimiento.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Hasta qué hora puede durar el evento?</summary>
         <p>El uso del inmueble empieza a las 11:00 a.m. Toda música y actividad debe detenerse a las 11:00 p.m.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Me regresan el depósito en garantía?</summary>
         <p>Sí, siempre que el inmueble se entregue limpio y sin daños. Si hay algo que reparar, limpiar o si no se respetan las reglas, se descuenta del depósito.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Qué pasa si cancelo mi evento?</summary>
         <p>El depósito en garantía de $500 no es reembolsable en caso de cancelación.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Incluye servicio de salvavidas?</summary>
         <p>No de forma incluida. Se puede contratar por $600 MXN adicionales, e incluye una persona encargada de vigilar a los niños durante el uso de la alberca.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Qué no puedo meter a la alberca?</summary>
         <p>Está prohibido introducir objetos de plástico o basura: corcholatas, globos, botellas, vasos desechables, platos o envolturas. Tampoco se permite comer o tomar dentro del agua.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Cuánto se hace desde Guadalajara y hay casetas?</summary>
         <p>Aproximadamente 55–60 minutos por la carretera 401, sin casetas.</p>
       </details>
 
-      <details class="faq__item">
+      <details class="faq__item" data-reveal>
         <summary>¿Hay estacionamiento?</summary>
         <p>Sí, el lugar cuenta con estacionamiento para los invitados.</p>
       </details>
@@ -552,6 +557,49 @@
   </symbol>
   <symbol id="icono-whatsapp" viewBox="0 0 24 24">
     <path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.31-1.39a9.9 9.9 0 0 0 4.73 1.2h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2m0 1.8c2.19 0 4.25.85 5.8 2.4a8.13 8.13 0 0 1 2.4 5.71c0 4.47-3.64 8.11-8.12 8.11a8.1 8.1 0 0 1-4.13-1.13l-.3-.17-3.15.82.84-3.07-.19-.32a8.07 8.07 0 0 1-1.24-4.31c0-4.47 3.64-8.11 8.12-8.11m-4.65 4.14c-.16 0-.42.06-.64.3s-.85.83-.85 2.02.87 2.35.99 2.51c.12.16 1.7 2.6 4.13 3.65.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.09.47-.07 1.44-.59 1.64-1.15.2-.57.2-1.05.14-1.15-.06-.1-.22-.16-.46-.28-.24-.12-1.44-.71-1.66-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.77.95-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.93-1.19-.71-.63-1.19-1.42-1.33-1.66-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.34-.76-1.83-.2-.48-.4-.42-.55-.42h-.47Z"/>
+  </symbol>
+
+  <!-- Iconos de amenidades -->
+  <symbol id="icono-alberca" viewBox="0 0 24 24">
+    <path d="M2 17c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M2 12c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <path d="M6 8V4a2 2 0 012-2h1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icono-asador" viewBox="0 0 24 24">
+    <path d="M12 2c-1.2 2.6-3.8 3.8-3.8 7.2a3.8 3.8 0 007.6 0c0-1.6-.7-2.4-.9-2.7 0 1.3-.8 2-1.7 2 .6-2.4-1.2-3-1.2-6.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M5 21h14M7 21v-3M17 21v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icono-palapa" viewBox="0 0 24 24">
+    <path d="M2 10L12 3l10 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M4 10v10M20 10v10M4 15h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icono-kiosco" viewBox="0 0 24 24">
+    <path d="M5 4h14l-6 8v8M9 20h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M8 4c0 2 1.8 2 1.8 4M13 4c0 2 1.8 2 1.8 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  </symbol>
+  <symbol id="icono-sonido" viewBox="0 0 24 24">
+    <path d="M4 9v6h4l5 4V5L8 9H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M17.5 8.5a5 5 0 010 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M20 6a9 9 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  </symbol>
+  <symbol id="icono-regadera" viewBox="0 0 24 24">
+    <path d="M5 11a7 7 0 0114 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M3 11h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M7 15v1M12 15v2M17 15v1M9.5 18v1M14.5 18v1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icono-banos" viewBox="0 0 24 24">
+    <rect x="5" y="3" width="14" height="18" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <circle cx="15" cy="12" r="1.2" fill="currentColor"/>
+  </symbol>
+  <symbol id="icono-estacionamiento" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M10 16V8h2.5a2.5 2.5 0 010 5H10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icono-wifi" viewBox="0 0 24 24">
+    <path d="M2.5 8.5a15 15 0 0119 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M5.5 12.3a10.5 10.5 0 0113 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+    <path d="M8.5 16a6 6 0 017 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <circle cx="12" cy="19.2" r="1.1" fill="currentColor"/>
   </symbol>
 </svg>
 

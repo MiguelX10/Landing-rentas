@@ -3,6 +3,35 @@
 
   const prefiereMenosMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Números que cuentan desde 0 al entrar en pantalla ($3,500, 50 personas...) */
+  const contadores = document.querySelectorAll('[data-contador]');
+  if (contadores.length) {
+    contadores.forEach((el) => {
+      const meta = parseInt(el.dataset.contador, 10);
+      if (prefiereMenosMovimiento) {
+        el.textContent = meta.toLocaleString('es-MX');
+        return;
+      }
+      const contadorObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          contadorObserver.disconnect();
+          const duracion = 1200;
+          const inicio = performance.now();
+          const paso = (ahora) => {
+            const progreso = Math.min((ahora - inicio) / duracion, 1);
+            const facil = 1 - Math.pow(1 - progreso, 3);
+            el.textContent = Math.round(facil * meta).toLocaleString('es-MX');
+            if (progreso < 1) requestAnimationFrame(paso);
+          };
+          requestAnimationFrame(paso);
+        },
+        { threshold: 0.6 }
+      );
+      contadorObserver.observe(el);
+    });
+  }
+
   /* Switch de modo claro/oscuro. El tema inicial ya lo aplica un script
      inline en <head> (para no parpadear); aquí solo se sincroniza el
      checkbox y se guarda el cambio cuando el usuario lo toca. */
@@ -140,7 +169,7 @@
   }
 
   /* Scroll reveal, con stagger automático entre hermanos del mismo contenedor */
-  const revealables = document.querySelectorAll('[data-reveal], [data-reveal-pop]');
+  const revealables = document.querySelectorAll('[data-reveal], [data-reveal-pop], [data-reveal-izq], [data-reveal-der]');
   if (revealables.length) {
     const contadorPorPadre = new Map();
     revealables.forEach((el) => {
